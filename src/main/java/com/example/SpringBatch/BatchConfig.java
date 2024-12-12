@@ -1,23 +1,16 @@
 package com.example.SpringBatch;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.data.RepositoryItemReader;
 import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
-import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.batch.item.support.CompositeItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +30,12 @@ public class BatchConfig {
 	@Autowired
 	private JobRepository jobRepository;
 	
+	@Autowired
+	private JobListener jobListener;
+	
+	@Autowired
+	private Steplistener steplistener;
+	
 	public BatchConfig( UserRepository userRepository ,PlatformTransactionManager transactionManager) {
 		
 		this.userRepository=userRepository;
@@ -52,33 +51,39 @@ public class BatchConfig {
 	
 	
 	@Bean
-	public  FlatFileItemReader<User> flatFileItemReader(){                                         //to read csv file  
+	public  FlatFileItemReader<User> flatFileItemReader()  {                                         //to read csv file  
 		
 		final FlatFileItemReader<User> flatFileItemReader= new FlatFileItemReader<>();
 		
-		flatFileItemReader.setResource(new FileSystemResource(fileLoaction));
-		flatFileItemReader.setName("fileReader");
-		flatFileItemReader.setLinesToSkip(1);
-		flatFileItemReader.setStrict(false);
-		flatFileItemReader.setLineMapper(lineMapper());                      //linemapper tells how to store readed data(in this case as java obj)
+			flatFileItemReader.setResource(new FileSystemResource(fileLoaction));
+			flatFileItemReader.setName("fileReader");
+			flatFileItemReader.setLinesToSkip(1);
+			flatFileItemReader.setStrict(false);
+			flatFileItemReader.setLineMapper(lineMapper());          //linemapper tells how to store readed data(in this case as java obj)
+                    
+		
 		return flatFileItemReader;
+		
 	    }
+	
 	
 	public LineMapper<User> lineMapper(){
 		
 		final DefaultLineMapper<User> lineMapper =new DefaultLineMapper<>();
 		final DelimitedLineTokenizer delimitedLineTokenizer=new DelimitedLineTokenizer();   //read data 
 		
-		delimitedLineTokenizer.setDelimiter(",");
-		delimitedLineTokenizer.setStrict(false);
-		delimitedLineTokenizer.setNames("userId","firstName","lastName","country","email");
-		
-		final BeanWrapperFieldSetMapper<User> beanWrapperFieldSetMapper=new BeanWrapperFieldSetMapper<>();  //map readed data to given type
-		beanWrapperFieldSetMapper.setTargetType(User.class);                                               //set which type to map
-		
-		lineMapper.setLineTokenizer(delimitedLineTokenizer);                                              // reader 
-		lineMapper.setFieldSetMapper(beanWrapperFieldSetMapper);                                          //writer to java obj
-		
+	
+			
+			delimitedLineTokenizer.setDelimiter(",");
+			delimitedLineTokenizer.setStrict(true);
+			delimitedLineTokenizer.setNames("userId","firstName","lastName","country","email");
+			
+			final BeanWrapperFieldSetMapper<User> beanWrapperFieldSetMapper=new BeanWrapperFieldSetMapper<>();  //map readed data to given type
+			beanWrapperFieldSetMapper.setTargetType(User.class);                                               //set which type to map
+			
+			lineMapper.setLineTokenizer(delimitedLineTokenizer);                                              // reader 
+			lineMapper.setFieldSetMapper(beanWrapperFieldSetMapper);                                          //writer to java obj
+			
 		return lineMapper;
 		
 	}
@@ -145,6 +150,7 @@ public class BatchConfig {
 				    .<User,User>chunk(10, transactionManager)
 				    .reader(flatFileItemReader())
 				    .writer(insertitemWriter())
+				    .listener(steplistener)
 				    .build();
 	}
 	
@@ -152,17 +158,17 @@ public class BatchConfig {
 	
 	
 	@Bean
-	public Job userimportjob() {
+	public Job userimportjob()  {
 		
 		return new JobBuilder("userimportjob",jobRepository)
 				.start(userDataImportStep())
+				.listener(jobListener)
 				.build();
 	}
 	
 	
 	
 	 
-	
 	
 	
 	
