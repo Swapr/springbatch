@@ -13,6 +13,16 @@ public class Steplistener implements StepExecutionListener {
 	public ExitStatus afterStep(StepExecution stepExecution) {
 		
 		
+			System.out.println("job is waiting");
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			}
+			System.out.println("job is runnig ");
+		
+		
 		return StepExecutionListener.super.afterStep(stepExecution);
 	}
 

@@ -1,11 +1,16 @@
 package com.example.SpringBatch;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
@@ -13,6 +18,9 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.batch.item.file.FlatFileParseException;
 import org.springframework.batch.item.file.transform.FlatFileFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +35,18 @@ public class BatchController {
 	private JobLauncher jobLauncher;
 	@Autowired
 	private Job job;
+	@Autowired
+	@Qualifier("asyncJobLauncher")
+	private JobLauncher asyncJobLauncher;
+	
+	
+	@Autowired
+	private JobExplorer jobExplorer;
+	
+	private Long jobExecutionId;
+	
+	
+	private List<Throwable> jobExceptionsRaised = new ArrayList<>();
 	
 	
 	@RequestMapping("/startbatch")
@@ -38,18 +58,14 @@ public class BatchController {
 				        
 		try {
 			 JobExecution jobExecution =jobLauncher.run(job, jobParameters);          
-			 try {
-				Thread.sleep(6000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			 
 			  BatchStatus batchStatus=jobExecution.getStatus();
+			  
 			 if(batchStatus==BatchStatus.COMPLETED)
 			 {
 				 return "batch completed";
 			 }
+			 
 			 else
 			 {
 				 for (Throwable exception: jobExecution.getAllFailureExceptions())
@@ -62,7 +78,11 @@ public class BatchController {
 						 return "batch failed";
 				 }
 				 
+				 return "batch failed";
 			 }
+			 
+			 
+			 
 					 
 			 	 
 		}catch (FlatFileFormatException e) {
@@ -85,6 +105,118 @@ public class BatchController {
 		}
 		
 		return "request completed but batch not started";
+	}
+	
+	
+	
+	@RequestMapping("/startbatch/getstatus")
+	   public String startbatchwithstatus() {
+		
+		JobParameters jobParameters=new JobParametersBuilder()
+			      .addLong("timestamp", System.currentTimeMillis())
+			      .toJobParameters();
+
+		
+		try {
+		 JobExecution jobExecution =asyncJobLauncher.run(job, jobParameters); 
+		 
+		 
+		 try {
+			  BatchStatus batchStatus=jobExecution.getStatus();
+			  System.out.println("job launched and status is "+batchStatus.toString());    //batch status is starting 
+			Thread.sleep(4000);                                                           //waitinig for batch status to change from starting to start
+	         
+			
+			
+		} catch (InterruptedException e) {
+			
+			e.printStackTrace();
+		}
+		 
+		 if(!jobExecution.getAllFailureExceptions().isEmpty())
+		 {
+			 for(Throwable exception:jobExecution.getAllFailureExceptions())
+			 {
+				 jobExceptionsRaised.add(exception);
+			 }
+		 }
+		 System.out.println("Size of jbexceptionraised"+jobExceptionsRaised.size());
+		               jobExecutionId =jobExecution.getJobId();
+		 
+			 
+			  BatchStatus batchStatus=jobExecution.getStatus();
+			  System.out.println("completed thread sleep now job status is  "+batchStatus.toString());
+	     
+			  
+		  
+		 if( batchStatus==BatchStatus.STARTED)
+		 {
+			  return "batch started";
+		 }
+		 else
+		 {
+			 
+		 }
+			 return "batch failed";
+		
+		 
+			 
+		 
+		 		 	 
+	}catch (FlatFileFormatException e) {
+		throw new IncorrectCSVFileFormatException("please check CSV file format ");
+		
+	}catch (FlatFileParseException e) {
+	    throw new IncorrectCSVFileFormatException("please check csv file format");
+	} catch (JobExecutionAlreadyRunningException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (JobRestartException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (JobInstanceAlreadyCompleteException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (JobParametersInvalidException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+		
+		
+		return "batch failed";
+	}
+	
+	
+	
+	
+	
+	@RequestMapping("/getbatchstatus")
+	public ResponseEntity<String> getBatchStatus() {
+		
+		if(jobExecutionId!=null) {
+			
+			JobExecution jobExecution=jobExplorer.getJobExecution(jobExecutionId);
+			
+			/*
+			 * List<Throwable> failureExceptions=jobExecution.getAllFailureExceptions();
+			 * System.out.println(":size of failure exceptions"+ failureExceptions.size());
+			 */
+			System.out.println("Size of jbexceptionraised"+jobExceptionsRaised.size());
+			
+			 for (Throwable exception: jobExceptionsRaised)
+			 {
+				 if ( exception instanceof FlatFileParseException )
+				 {
+					 throw new IncorrectCSVFileFormatException("batch failed due to input csv file format incorrect");
+				 }
+				 
+			 }
+
+			
+			return ResponseEntity.ok(jobExecution.getStatus().toString());
+		}
+		return ResponseEntity.badRequest().body("batch not started please start batch first");
+		
 	}
 
 }
