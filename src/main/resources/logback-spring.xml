@@ -1,0 +1,41 @@
+<configuration>
+    <!-- Clear log files on application start -->
+    <property name="LOG_CLEANUP" value="true" />
+    
+    <!-- Define file paths for logs -->
+    <springProfile name="dev">
+        <property name="LOG_PATH" value="logs/dev-application.log" />
+    </springProfile>
+    <springProfile name="prod">
+        <property name="LOG_PATH" value="logs/prod-application.log" />
+    </springProfile>
+    <springProfile name="default">
+        <property name="LOG_PATH" value="logs/default-application.log" />
+    </springProfile>
+
+  
+
+    <!-- File Appender -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_PATH}</file>
+        <append>${LOG_CLEANUP}</append> <!-- Overwrite logs on application restart -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+     <!-- Console Appender: Logs to console -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <root level="INFO">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE" />
+    </root>
+    
+
+  
+</configuration>

@@ -2,8 +2,8 @@ package com.example.SpringBatch;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -19,12 +19,14 @@ import org.springframework.batch.item.file.FlatFileParseException;
 import org.springframework.batch.item.file.transform.FlatFileFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.SpringBatch.exceptioon.IncorrectCSVFileFormatException;
+
+import ch.qos.logback.classic.Logger;
+
 
 @RestController
 @RequestMapping("/batch")
@@ -39,12 +41,12 @@ public class BatchController {
 	@Qualifier("asyncJobLauncher")
 	private JobLauncher asyncJobLauncher;
 	
-	
 	@Autowired
 	private JobExplorer jobExplorer;
 	
 	private Long jobExecutionId;
 	
+	private static final Logger logger= (Logger) LoggerFactory.getLogger(BatchController.class);
 	
 	private List<Throwable> jobExceptionsRaised = new ArrayList<>();
 	
@@ -119,7 +121,7 @@ public class BatchController {
 		
 		try {
 		 JobExecution jobExecution =asyncJobLauncher.run(job, jobParameters); 
-		 
+		 logger.info("launcher started job");
 		 
 		 try {
 			  BatchStatus batchStatus=jobExecution.getStatus();

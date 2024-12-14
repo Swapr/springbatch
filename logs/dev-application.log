@@ -1,0 +1,49 @@
+2024-12-13 21:33:14 [main] INFO  c.e.S.SpringBatchApplication - Starting SpringBatchApplication using Java 17.0.8 with PID 15172 (G:\Web devloper boot camp udemy course\GeeksforGeeksprojects\SpringBatch\target\classes started by lenovo in G:\Web devloper boot camp udemy course\GeeksforGeeksprojects\SpringBatch)
+2024-12-13 21:33:14 [main] INFO  c.e.S.SpringBatchApplication - The following 1 profile is active: "dev"
+2024-12-13 21:33:15 [main] INFO  o.s.b.c.c.annotation.BatchRegistrar - Finished Spring Batch infrastructure beans configuration in 8 ms.
+2024-12-13 21:33:16 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-13 21:33:16 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 117 ms. Found 1 JPA repository interface.
+2024-12-13 21:33:17 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-12-13 21:33:17 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-12-13 21:33:17 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-12-13 21:33:17 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.33]
+2024-12-13 21:33:17 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-12-13 21:33:17 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2717 ms
+2024-12-13 21:33:17 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-12-13 21:33:17 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4ffced4e
+2024-12-13 21:33:17 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-12-13 21:33:17 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-13 21:33:17 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.2.Final
+2024-12-13 21:33:18 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-12-13 21:33:18 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-13 21:33:18 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.36
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2024-12-13 21:33:19 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-13 21:33:19 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-13 21:33:20 [main] INFO  o.s.b.c.r.s.JobRepositoryFactoryBean - No database type set, using meta data indicating: MYSQL
+2024-12-13 21:33:20 [main] INFO  o.s.b.c.l.s.TaskExecutorJobLauncher - No TaskExecutor has been set, defaulting to synchronous executor.
+2024-12-13 21:33:20 [main] INFO  o.s.b.c.c.a.BatchObservabilityBeanPostProcessor - No Micrometer observation registry found, defaulting to ObservationRegistry.NOOP
+2024-12-13 21:33:20 [main] INFO  o.s.b.c.c.a.BatchObservabilityBeanPostProcessor - No Micrometer observation registry found, defaulting to ObservationRegistry.NOOP
+2024-12-13 21:33:20 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-12-13 21:33:21 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-12-13 21:33:21 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2024-12-13 21:33:21 [main] INFO  c.e.S.SpringBatchApplication - Started SpringBatchApplication in 7.922 seconds (process running for 8.332)
+2024-12-13 21:33:31 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-13 21:33:31 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-12-13 21:33:31 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2024-12-13 21:33:32 [http-nio-8080-exec-2] INFO  c.e.SpringBatch.BatchController - launcher started job
+2024-12-13 21:33:32 [SimpleAsyncTaskExecutor-1] INFO  o.s.b.c.l.s.TaskExecutorJobLauncher - Job: [SimpleJob: [name=userimportjob]] launched with the following parameters: [{'timestamp':'{value=1734105811461, type=class java.lang.Long, identifying=true}'}]
+2024-12-13 21:33:32 [SimpleAsyncTaskExecutor-1] INFO  o.s.batch.core.job.SimpleStepHandler - Executing step: [userDataImportStep]
+2024-12-13 21:33:34 [SimpleAsyncTaskExecutor-1] INFO  o.s.batch.core.step.AbstractStep - Step: [userDataImportStep] executed in 2s170ms
+2024-12-13 21:33:45 [SimpleAsyncTaskExecutor-1] INFO  o.s.b.c.l.s.TaskExecutorJobLauncher - Job: [SimpleJob: [name=userimportjob]] completed with the following parameters: [{'timestamp':'{value=1734105811461, type=class java.lang.Long, identifying=true}'}] and the following status: [COMPLETED] in 13s94ms
+2024-12-13 21:33:48 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2024-12-13 21:33:48 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2024-12-13 21:33:48 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-13 21:33:48 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-12-13 21:33:48 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
