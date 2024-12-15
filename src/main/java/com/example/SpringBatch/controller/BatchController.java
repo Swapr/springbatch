@@ -1,4 +1,4 @@
-package com.example.SpringBatch;
+package com.example.SpringBatch.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +20,12 @@ import org.springframework.batch.item.file.transform.FlatFileFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.SpringBatch.exceptioon.IncorrectCSVFileFormatException;
+import com.example.SpringBatch.service.KafkaProducerService;
 
 import ch.qos.logback.classic.Logger;
 
@@ -44,9 +46,12 @@ public class BatchController {
 	@Autowired
 	private JobExplorer jobExplorer;
 	
+	@Autowired 
+	private KafkaProducerService kafkaProducerService;
+	
 	private Long jobExecutionId;
 	
-	private static final Logger logger= (Logger) LoggerFactory.getLogger(BatchController.class);
+	public static final Logger logger= (Logger) LoggerFactory.getLogger(BatchController.class);
 	
 	private List<Throwable> jobExceptionsRaised = new ArrayList<>();
 	
@@ -122,6 +127,7 @@ public class BatchController {
 		try {
 		 JobExecution jobExecution =asyncJobLauncher.run(job, jobParameters); 
 		 logger.info("launcher started job");
+		 kafkaProducerService.sendMessage("topic1", "message to kafka : job initiated current job status is:"+jobExecution.getStatus().toString());
 		 
 		 try {
 			  BatchStatus batchStatus=jobExecution.getStatus();
@@ -153,12 +159,14 @@ public class BatchController {
 		  
 		 if( batchStatus==BatchStatus.STARTED)
 		 {
+			 kafkaProducerService.sendMessage("topic1","job has started ");
 			  return "batch started";
 		 }
 		 else
 		 {
 			 
 		 }
+		    kafkaProducerService.sendMessage("topic1", "job  failed");
 			 return "batch failed";
 		
 		 
@@ -209,14 +217,18 @@ public class BatchController {
 			 {
 				 if ( exception instanceof FlatFileParseException )
 				 {
+					 kafkaProducerService.sendMessage("topic1", "job failed due to incorrect csv file eformat");
 					 throw new IncorrectCSVFileFormatException("batch failed due to input csv file format incorrect");
+					 
 				 }
 				 
 			 }
 
+			 kafkaProducerService.sendMessage("topic1", "job status is "+jobExecution.getStatus().toString());
 			
 			return ResponseEntity.ok(jobExecution.getStatus().toString());
 		}
+		kafkaProducerService.sendMessage("topic1", "job not stared please start job first");
 		return ResponseEntity.badRequest().body("batch not started please start batch first");
 		
 	}

@@ -19,6 +19,8 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.example.SpringBatch.config.BatchConfig;
+
 import static org.mockito.Mockito.*;
 
 import java.util.Collections;

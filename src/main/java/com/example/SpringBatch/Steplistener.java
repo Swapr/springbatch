@@ -15,7 +15,7 @@ public class Steplistener implements StepExecutionListener {
 		
 			System.out.println("job is waiting");
 			try {
-				Thread.sleep(10000);
+				Thread.sleep(8000);
 			} catch (InterruptedException e) {
 				
 				e.printStackTrace();

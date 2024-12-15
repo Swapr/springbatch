@@ -1,4 +1,4 @@
-package com.example.SpringBatch;
+package com.example.SpringBatch.config;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -15,12 +15,16 @@ import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.batch.JobLauncherApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import com.example.SpringBatch.JobListener;
+import com.example.SpringBatch.Steplistener;
+import com.example.SpringBatch.User;
+import com.example.SpringBatch.UserRepository;
 
 @Configuration
 public class BatchConfig {
