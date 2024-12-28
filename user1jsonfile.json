@@ -1,0 +1,37 @@
+[
+  {
+    "userId": 1,
+    "firstName": "John",
+    "lastName": "Doe",
+    "country": "USA",
+    "email": "john.doe@example.com"
+  },
+  {
+    "userId": 2,
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "country": "Canada",
+    "email": "jane.smith@example.com"
+  },
+  {
+    "userId": 3,
+    "firstName": "Alice",
+    "lastName": "Johnson",
+    "country": "UK",
+    "email": "alice.johnson@example.com"
+  },
+  {
+    "userId": 4,
+    "firstName": "Bob",
+    "lastName": "Brown",
+    "country": "Australia",
+    "email": "bob.brown@example.com"
+  },
+  {
+    "userId": 5,
+    "firstName": "Charlie",
+    "lastName": "Davis",
+    "country": "India",
+    "email": "charlie.davis@example.com"
+  }
+  ]

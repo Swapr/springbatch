@@ -1,4 +1,4 @@
-package com.example.SpringBatch;
+package com.example.SpringBatch.model;
 import java.io.Serializable;
 
 import jakarta.persistence.Entity;

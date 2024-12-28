@@ -23,8 +23,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.example.SpringBatch.JobListener;
 import com.example.SpringBatch.Steplistener;
-import com.example.SpringBatch.User;
-import com.example.SpringBatch.UserRepository;
+import com.example.SpringBatch.model.User;
+import com.example.SpringBatch.repository.UserRepository;
 
 @Configuration
 public class BatchConfig {

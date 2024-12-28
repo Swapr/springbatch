@@ -14,5 +14,10 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<String>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		
 	}
-
+	
+	@ExceptionHandler (KafkaServiceException.class)
+	public void kafkaServiceException() {
+		
+		System.out.println("kafka server has issue please check");
+	}
 }

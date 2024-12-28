@@ -12,10 +12,13 @@ public class KafkaProducerService {
 	
 	public static final Logger logger= (Logger) LoggerFactory.getLogger(KafkaProducerService.class);
 	
-	
+	private KafkaTemplate<String, String> kafkaTemplate;
 	
 	@Autowired
-	private KafkaTemplate<String, String> kafkaTemplate;
+	public KafkaProducerService(KafkaTemplate<String, String > kafkaTemplate) {
+		this.kafkaTemplate=kafkaTemplate;
+		
+	}
 	
 	public void sendMessage(String topic,String message) {
 		logger.info("message sent to kafka topic: "+topic+", and message is : "+message);

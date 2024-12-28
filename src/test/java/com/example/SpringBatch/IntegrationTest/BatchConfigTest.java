@@ -1,8 +1,6 @@
 package com.example.SpringBatch.IntegrationTest;
 
 
-import com.example.SpringBatch.UserRepository;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -13,6 +11,8 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.example.SpringBatch.repository.UserRepository;
 
 @SpringBootTest
 

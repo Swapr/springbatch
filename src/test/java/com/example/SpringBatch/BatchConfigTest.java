@@ -20,6 +20,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.example.SpringBatch.config.BatchConfig;
+import com.example.SpringBatch.model.User;
+import com.example.SpringBatch.repository.UserRepository;
 
 import static org.mockito.Mockito.*;
 
