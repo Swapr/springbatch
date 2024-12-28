@@ -2,6 +2,7 @@ package com.example.SpringBatch.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.SpringBatch.exceptioon.IncorrectCSVFileFormatException;
+import com.example.SpringBatch.repository.JsonBatchService;
 import com.example.SpringBatch.service.KafkaProducerService;
 
 import ch.qos.logback.classic.Logger;
@@ -47,6 +49,9 @@ public class BatchController {
 	
 	@Autowired 
 	private KafkaProducerService kafkaProducerService;
+	
+	@Autowired
+	private JsonBatchService jsonBatchService;
 	
 	private Long jobExecutionId;
 	
@@ -231,5 +236,47 @@ public class BatchController {
 		return ResponseEntity.badRequest().body("batch not started please start batch first");
 		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@RequestMapping("/startJsonImportBatch")
+	public ResponseEntity<String> startJsonimporotJob(){
+		
+		Optional<JobExecution> optional=jsonBatchService.startJsonJob();
+		if(optional.isPresent())
+		{
+				return ResponseEntity.ok("jsonimporbatch start request completed check status ");
+		}
+		else
+			return 
+					ResponseEntity.badRequest().body("batch failed to start");
+		
+	}
+	
+	
+	
+	
+	@RequestMapping("/getJsonImportBatchStatus")
+	public ResponseEntity<String> getJsonImportBatchStatus(){
+		
+		Optional<BatchStatus> batchStatus= jsonBatchService.getJsonImportJobStatus();
+		if(batchStatus.isPresent())
+		{
+			System.out.println("received request for jsonimportbatchstatus and status is "+ batchStatus.get());
+			return ResponseEntity.ok("current batch status is:"+batchStatus.get());	
+		}
+		else
+			return ResponseEntity.ok("Batch is not started batchstatus is:"+BatchStatus.UNKNOWN);
+	}
+	
+	
+	
 
 }
